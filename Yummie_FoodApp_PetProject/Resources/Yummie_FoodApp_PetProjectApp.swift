@@ -11,7 +11,7 @@ import SwiftUI
 struct Yummie_FoodApp_PetProjectApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainScreen()
         }
     }
 }
