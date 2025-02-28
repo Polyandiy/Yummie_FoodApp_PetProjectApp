@@ -6,23 +6,23 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct CategoryView: View {
     let dish: DishCategory
 
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
-            AsyncImage(
-                url: URL(string: dish.image)!,
-                content: { image in
-                    image.resizable()
-                        .aspectRatio(contentMode: .fill)
-                },
-                placeholder: {
-                    ProgressView()
-                }
-            )
+            let url = URL(string: dish.image)
+            WebImage(url: url, sceleton: {
+                SceletonView(enabled: true, shape: RoundedRectangle(cornerRadius: 4))
+            }, placeholder: {
+                NoImageView()
+            })
+            .resizable()
+            .aspectRatio(contentMode: .fit)
             .frame(width: 60, height: 60)
+            .cornerRadius(4)
 
             Text(dish.name)
                 .font(.body)
@@ -33,6 +33,9 @@ struct CategoryView: View {
         .frame(width: 128, height: 128)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(12)
+        .onAppear {
+            print("Категории - \(dish.image)")
+        }
     }
 }
 

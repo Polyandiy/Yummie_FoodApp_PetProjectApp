@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct PopularDishesView: View {
     let dish: Dish
@@ -14,22 +15,18 @@ struct PopularDishesView: View {
         VStack(alignment: .leading, spacing: 8) {
 
             HStack(alignment: .top) {
-                Image(systemName: "heart")
+                //Image(systemName: "heart") //сделать кнопку в правом углу
 
-                Spacer()
-
-                AsyncImage(
-                    url: URL(string: dish.image)!,
-                    content: { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 70, height: 70)
-                            .cornerRadius(20)
-                    },
-                    placeholder: {
-                        ProgressView()
-                    }
-                )
+                let url = URL(string: dish.image)
+                WebImage(url: url, sceleton: {
+                    SceletonView(enabled: true, shape: RoundedRectangle(cornerRadius: 4))
+                }, placeholder: {
+                    NoImageView()
+                })
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity)
+                .cornerRadius(8)
             }
 
             Spacer()
@@ -49,16 +46,16 @@ struct PopularDishesView: View {
                 }
             }
 
-            Text("\(dish.calories) Calories")
+            Text("\(dish.calories) ккал")
                 .font(.caption)
                 .foregroundColor(.pink)
 
             HStack {
                 Image(systemName: "clock")
-                Text("10 mins")
+                Text("10 мин")
 
                 Image(systemName: "bell")
-                Text("4 Serving")
+                Text("4 порции")
             }
             .font(.caption2)
             .foregroundColor(.gray)

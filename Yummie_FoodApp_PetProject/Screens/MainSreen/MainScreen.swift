@@ -14,8 +14,8 @@ struct MainScreen: View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 VStack(spacing: 5) {
-                    Text("Привет!")
-                        .font(.title)
+                    Text("YAMMI")
+                        .font(.title).bold()
                         .foregroundColor(.pink)
                     
                     Text("Хочешь есть здоровую еду?")
@@ -26,11 +26,11 @@ struct MainScreen: View {
                 .padding(.bottom)
                 
                 VStack(alignment: .leading) {
-                    var categories = viewModel.allDishes?.categories ?? []
-                    SectionTitleView(title: "Категории \(categories.count)", action: nil)
+                    let categories = viewModel.allDishes?.categories ?? []
+                    SectionTitleView(title: "Категории", count: categories.count, action: nil)
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack {
-                            ForEach(categories) { dish in
+                            ForEach(categories.prefix(4)) { dish in
                                 CategoryView(dish: dish)
                             }
                         }
@@ -40,14 +40,15 @@ struct MainScreen: View {
                 .padding(.bottom)
                 
                 VStack(alignment: .leading) {
-                    SectionTitleView(title: "Популярные блюда", action: nil)
+                    let populars = viewModel.allDishes?.populars ?? []
+                    SectionTitleView(title: "Популярные блюда", count: populars.count, action: nil)
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack {
-                            ForEach(viewModel.allDishes?.populars ?? []) { dish in
-                                NavigationLink(destination: EmptyView()) { //DishDetailView(dish: dish)
-                                    PopularDishesView(dish: dish)
-                                }
-                                .buttonStyle(PlainButtonStyle())
+                            ForEach(populars.prefix(3)) { dish in
+                                PopularDishesView(dish: dish)
+                                    .background {
+                                        navigationLink(destination: DetailDishScreen(dish: dish))
+                                    }
                             }
                         }
                     }
@@ -55,10 +56,14 @@ struct MainScreen: View {
                 }
                 .padding(.bottom, 8)
                 
-                SectionTitleView(title: "Рекомендуем", action: nil)
+                let specials = viewModel.allDishes?.specials ?? []
+                SectionTitleView(title: "Рекомендуем", count: specials.count, action: nil)
                 LazyVStack {
-                    ForEach(viewModel.allDishes?.specials ?? []) { dish in
+                    ForEach(specials.prefix(2)) { dish in
                         RecommendedView(dish: dish)
+                            .background {
+                                navigationLink(destination: DetailDishScreen(dish: dish))
+                            }
                     }
                 }
             }
@@ -76,6 +81,18 @@ struct MainScreen: View {
         .onAppear {
             viewModel.fetchAllDishes()
         }
+    }
+}
+
+extension MainScreen {
+    @ViewBuilder
+    func navigationLink<Destination: View>(destination: Destination) -> some View {
+        NavigationLink.EmptyLabel() {
+            LazyView {
+                destination
+            }
+        }
+        .opacity(0)
     }
 }
 

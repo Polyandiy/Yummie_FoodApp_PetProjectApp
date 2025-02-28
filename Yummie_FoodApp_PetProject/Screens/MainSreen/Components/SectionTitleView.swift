@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SectionTitleView: View {
     let title: String
+    let count: Int
     let action: (() -> Void)?
     
     var body: some View {
@@ -22,15 +23,14 @@ struct SectionTitleView: View {
             Button {
                 action?()
             } label: {
-                Text("See All")
+                Text("Все \(count)")
                     .foregroundColor(.pink)
             }
             .buttonStyle(.borderless)
-            .removed(action == nil)
         }
     }
 }
 
 #Preview {
-    SectionTitleView(title: "Категория", action: nil)
+    SectionTitleView(title: "Категория", count: 0, action: nil)
 }

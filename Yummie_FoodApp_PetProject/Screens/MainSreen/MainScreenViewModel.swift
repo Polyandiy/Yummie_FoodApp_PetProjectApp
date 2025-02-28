@@ -25,6 +25,7 @@ class MainScreenViewModel: ObservableObject {
     func fetchAllDishes() {
         guard loading == false else { return }
         self.loading = true
+        self.error = nil
     
         let promise = service.request(url: "https://yummie.glitch.me/dish-categories", decodeType: APIResponse.self)
         promise.sink { [weak self] completion in
