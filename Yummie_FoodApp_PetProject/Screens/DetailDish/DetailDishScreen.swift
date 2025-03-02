@@ -48,6 +48,7 @@ struct DetailDishScreen: View {
                         .foregroundColor(.secondary)
                     
                     Button {
+                        //MARK: 
                         print("Read more")
                     } label: {
                         Text("Read more")
@@ -89,7 +90,7 @@ struct DetailDishScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color(.systemGroupedBackground))
         .navigationTitle(dish.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

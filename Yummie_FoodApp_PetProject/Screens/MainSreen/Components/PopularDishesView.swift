@@ -13,9 +13,9 @@ struct PopularDishesView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-
             HStack(alignment: .top) {
-                //Image(systemName: "heart") //сделать кнопку в правом углу
+                //MARK: 
+                //Image(systemName: "heart") сделать кнопку в правом углу
 
                 let url = URL(string: dish.image)
                 WebImage(url: url, sceleton: {
@@ -61,7 +61,6 @@ struct PopularDishesView: View {
             .foregroundColor(.gray)
         }
         .padding()
-        .frame(width: 180)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(20.0)
     }

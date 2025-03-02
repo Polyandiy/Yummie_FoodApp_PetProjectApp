@@ -13,4 +13,10 @@ public extension View {
             self
         }
     }
+    
+    func embedInNavigationStack() -> some View {
+        NavigationStack {
+            self
+        }
+    }
 }

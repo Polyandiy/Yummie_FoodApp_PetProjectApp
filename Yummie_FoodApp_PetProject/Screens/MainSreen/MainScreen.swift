@@ -27,10 +27,9 @@ struct MainScreen: View {
                 
                 VStack(alignment: .leading) {
                     let categories = viewModel.allDishes?.categories ?? []
-                    SectionTitleView(title: "Категории", count: categories.count, action: nil)
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack {
-                            ForEach(categories.prefix(4)) { dish in
+                            ForEach(categories) { dish in
                                 CategoryView(dish: dish)
                             }
                         }
@@ -41,14 +40,18 @@ struct MainScreen: View {
                 
                 VStack(alignment: .leading) {
                     let populars = viewModel.allDishes?.populars ?? []
-                    SectionTitleView(title: "Популярные блюда", count: populars.count, action: nil)
+                    SectionTitleView(title: "Популярные блюда", dishes: populars, action: nil)
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack {
                             ForEach(populars.prefix(3)) { dish in
-                                PopularDishesView(dish: dish)
-                                    .background {
-                                        navigationLink(destination: DetailDishScreen(dish: dish))
+                                NavigationLink {
+                                    LazyView {
+                                        DetailDishScreen(dish: dish)
                                     }
+                                } label: {
+                                    PopularDishesView(dish: dish)
+                                        .frame(width: 180)
+                                }
                             }
                         }
                     }
@@ -57,20 +60,24 @@ struct MainScreen: View {
                 .padding(.bottom, 8)
                 
                 let specials = viewModel.allDishes?.specials ?? []
-                SectionTitleView(title: "Рекомендуем", count: specials.count, action: nil)
+                SectionTitleView(title: "Рекомендуемые", dishes: specials, action: nil)
                 LazyVStack {
                     ForEach(specials.prefix(2)) { dish in
-                        RecommendedView(dish: dish)
-                            .background {
-                                navigationLink(destination: DetailDishScreen(dish: dish))
+                        NavigationLink {
+                            LazyView {
+                                DetailDishScreen(dish: dish)
                             }
+                        } label: {
+                            RecommendedView(dish: dish)
+                        }
                     }
                 }
             }
             .padding()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color(.systemGroupedBackground))
+        .embedInNavigationStack()
         .overlay {
             ErrorView(message: viewModel.error?.stringError ?? "") {
                 viewModel.fetchAllDishes()
@@ -81,18 +88,6 @@ struct MainScreen: View {
         .onAppear {
             viewModel.fetchAllDishes()
         }
-    }
-}
-
-extension MainScreen {
-    @ViewBuilder
-    func navigationLink<Destination: View>(destination: Destination) -> some View {
-        NavigationLink.EmptyLabel() {
-            LazyView {
-                destination
-            }
-        }
-        .opacity(0)
     }
 }
 

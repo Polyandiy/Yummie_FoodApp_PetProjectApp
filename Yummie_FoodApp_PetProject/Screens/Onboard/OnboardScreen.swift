@@ -14,19 +14,19 @@ struct OnboardScreen: View {
     var body: some View {
         TabView(selection: $selection) {
             OnboardView(imageName: "Onboard1",
-                        title: "Fresh Food",
-                        description: "Order your favourite food from the top restaurants.",
+                        title: "Свежая еда",
+                        description: "Заказывайте еду из лучших ресторанов",
                         nextAction: goNext)
             .tag(0)
             
             OnboardView(imageName: "Onboard2",
-                        title: "Our Chef",
-                        description: "Our chefs are experienced professionals who take pride in preparing delicious.", nextAction: goNext)
+                        title: "Наш Шеф-повар",
+                        description: "Наши повара — опытные профессионалы, которые гордятся тем, что готовят вкусные блюда.", nextAction: goNext)
             .tag(1)
             
             OnboardView(imageName: "Onboard3",
-                        title: "Delivery",
-                        description: "Our delivery team works tirelessly to ensure that your food arrives hot, fresh and on time.",
+                        title: "Доставка",
+                        description: "Наша команда доставки работает не покладая рук, чтобы гарантировать, что ваша еда будет доставлена ​​горячей, свежей и вовремя.",
                         showDoneButton: true,
                         nextAction: {
                 showOnboarding = false

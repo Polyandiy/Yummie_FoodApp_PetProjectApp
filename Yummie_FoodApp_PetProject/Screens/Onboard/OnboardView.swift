@@ -35,13 +35,13 @@ struct OnboardView: View {
             
             Spacer()
             
-            Button("Get Started") {
+            Button("Начать!") {
                 nextAction()
             }
             .buttonStyle(OnboardButtonStyle())
             .removed(!showDoneButton)
             
-            Button("Next") {
+            Button("Далее") {
                 nextAction()
             }
             .buttonStyle(OnboardButtonStyle())

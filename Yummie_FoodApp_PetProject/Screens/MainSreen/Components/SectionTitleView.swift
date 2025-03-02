@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SectionTitleView: View {
     let title: String
-    let count: Int
+    let dishes: [Dish]
     let action: (() -> Void)?
     
     var body: some View {
@@ -20,17 +20,16 @@ struct SectionTitleView: View {
             
             Spacer()
             
-            Button {
-                action?()
+            NavigationLink {
+                DishesListSreen(title: title, dishes: dishes)
             } label: {
-                Text("Все \(count)")
+                Text("Все \(dishes.count)")
                     .foregroundColor(.pink)
             }
-            .buttonStyle(.borderless)
         }
     }
 }
 
 #Preview {
-    SectionTitleView(title: "Категория", count: 0, action: nil)
+    SectionTitleView(title: "Категория", dishes: [], action: nil)
 }
