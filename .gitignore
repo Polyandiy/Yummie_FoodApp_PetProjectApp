@@ -1,0 +1,8 @@
+# Игнорировать файлы сборки Xcode
+/build/
+Pods/
+*.xccheckout
+xcuserdata/
+*.xcuserstate
+Breakpoints_v2.xcbkptlist
+**/*.xcworkspacedata
