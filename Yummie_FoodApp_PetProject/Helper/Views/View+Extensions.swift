@@ -20,3 +20,20 @@ public extension View {
         }
     }
 }
+
+extension View {
+    @ViewBuilder
+    func bottom<Content: View>(show: Bool = true, _ content: Content) -> some View {
+        VStack(spacing: 0) {
+            self
+            content
+                .removed(!show)
+        }
+    }
+}
+
+extension View {
+    func bottom<Content: View>(show: Bool = true, @ViewBuilder content: @escaping () -> Content) -> some View {
+        bottom(show: show, content())
+    }
+}

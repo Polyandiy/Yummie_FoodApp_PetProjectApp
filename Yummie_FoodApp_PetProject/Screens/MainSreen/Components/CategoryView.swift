@@ -13,16 +13,18 @@ struct CategoryView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
-            let url = URL(string: dish.image)
-            WebImage(url: url, sceleton: {
-                SceletonView(enabled: true, shape: RoundedRectangle(cornerRadius: 4))
-            }, placeholder: {
+            if let url = URL(string: dish.image) {
+                WebImageWithValidation(url: url, sceleton: {
+                    SceletonView(enabled: true, shape: RoundedRectangle(cornerRadius: 4))
+                }, placeholder: {
+                    NoImageView()
+                })
+                .frame(width: 60, height: 60)
+                .cornerRadius(4)
+            } else {
                 NoImageView()
-            })
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 60, height: 60)
-            .cornerRadius(4)
+                    .frame(width: 60, height: 60)
+            }
 
             Text(dish.name)
                 .font(.body)
@@ -33,9 +35,6 @@ struct CategoryView: View {
         .frame(width: 128, height: 128)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(12)
-        .onAppear {
-            print("Категории - \(dish.image)")
-        }
     }
 }
 

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainScreen: View {
+    @EnvironmentObject var cartManager: CartManager
     @StateObject private var viewModel = MainScreenViewModel()
     
     var body: some View {
@@ -47,16 +48,26 @@ struct MainScreen: View {
                                 NavigationLink {
                                     LazyView {
                                         DetailDishScreen(dish: dish)
+                                            .environmentObject(cartManager)
                                     }
                                 } label: {
                                     PopularDishesView(dish: dish)
+                                        .bottom {
+                                            SelectCountView(count: cartManager.itemCount(for: dish)) {
+                                                cartManager.addToCart(dish)
+                                            } onDecrement: {
+                                                cartManager.removeFromCart(dish)
+                                            }
+                                            .frame(height: 24)
+                                            .padding(.bottom, 12)
+                                        }
                                         .frame(width: 180)
+                                        .background(Color(UIColor.systemBackground))
+                                        .cornerRadius(20.0)
                                 }
                             }
                         }
-                    }
-                    .frame(height: 250)
-                }
+                    }                }
                 .padding(.bottom, 8)
                 
                 let specials = viewModel.allDishes?.specials ?? []
@@ -66,6 +77,7 @@ struct MainScreen: View {
                         NavigationLink {
                             LazyView {
                                 DetailDishScreen(dish: dish)
+                                    .environmentObject(cartManager)
                             }
                         } label: {
                             RecommendedView(dish: dish)
@@ -85,7 +97,7 @@ struct MainScreen: View {
             .removed(viewModel.error == nil)
         }
         .showProgressView(viewModel.loading, hideContent: true)
-        .onAppear {
+        .onFirstAppear {
             viewModel.fetchAllDishes()
         }
     }

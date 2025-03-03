@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SectionTitleView: View {
+    @EnvironmentObject var cartManager: CartManager
+    
     let title: String
     let dishes: [Dish]
     let action: (() -> Void)?
@@ -22,6 +24,7 @@ struct SectionTitleView: View {
             
             NavigationLink {
                 DishesListSreen(title: title, dishes: dishes)
+                    .environmentObject(cartManager)
             } label: {
                 Text("Все \(dishes.count)")
                     .foregroundColor(.pink)

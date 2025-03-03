@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DishesListSreen: View {
+    @EnvironmentObject var cartManager: CartManager
+    
     let title: String
     let dishes: [Dish]
     
@@ -26,9 +28,21 @@ struct DishesListSreen: View {
                     ForEach(dishes, id: \.id) { dish in
                         NavigationLink {
                             DetailDishScreen(dish: dish)
+                                .environmentObject(cartManager)
                         } label: {
                             PopularDishesView(dish: dish)
-                                .frame(height: 250)
+                                .bottom {
+                                    SelectCountView(count: cartManager.itemCount(for: dish)) {
+                                        cartManager.addToCart(dish)
+                                    } onDecrement: {
+                                        cartManager.removeFromCart(dish)
+                                    }
+                                    .frame(height: 24)
+                                    .padding(.bottom, 12)
+                                }
+                                .background(Color(UIColor.systemBackground))
+                                .cornerRadius(20.0)
+                                .frame(height: 300)
                         }
                         .cornerRadius(10)
                     }

@@ -13,20 +13,16 @@ struct PopularDishesView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .top) {
-                //MARK: 
-                //Image(systemName: "heart") сделать кнопку в правом углу
-
-                let url = URL(string: dish.image)
-                WebImage(url: url, sceleton: {
+            if let url = URL(string: dish.image) {
+                WebImageWithValidation(url: url, sceleton: {
                     SceletonView(enabled: true, shape: RoundedRectangle(cornerRadius: 4))
                 }, placeholder: {
                     NoImageView()
                 })
-                .resizable()
-                .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity)
                 .cornerRadius(8)
+            } else {
+                NoImageView()
             }
 
             Spacer()
@@ -60,9 +56,15 @@ struct PopularDishesView: View {
             .font(.caption2)
             .foregroundColor(.gray)
         }
-        .padding()
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(20.0)
+        .overlay {
+            //MARK:
+            Button {
+                print("добавить в избранное")
+            } label: {
+                Image(systemName: "heart")
+            }
+        }
+        .padding(.all, 12)
     }
 }
 

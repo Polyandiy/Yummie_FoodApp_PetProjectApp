@@ -9,21 +9,24 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct DetailDishScreen: View {
+    @EnvironmentObject var cartManager: CartManager
+    
     let dish: Dish
     
     var body: some View {
         VStack(spacing: 30) {
-            let url = URL(string: dish.image)
-            WebImage(url: url, sceleton: {
-                SceletonView(enabled: true, shape: RoundedRectangle(cornerRadius: 4))
-            }, placeholder: {
+            if let url = URL(string: dish.image) {
+                WebImageWithValidation(url: url, sceleton: {
+                    SceletonView(enabled: true, shape: RoundedRectangle(cornerRadius: 4))
+                }, placeholder: {
+                    NoImageView()
+                })
+                .frame(width: 60, height: 60)
+                .cornerRadius(20)
+            } else {
                 NoImageView()
-                    .padding(.all, 50)
-            })
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(maxWidth: .infinity)
-            .cornerRadius(20)
+                    .frame(width: 60, height: 60)
+            }
             
             Divider()
                 .padding(.horizontal, -16)
@@ -34,7 +37,7 @@ struct DetailDishScreen: View {
                     
                     InfoRectangleView(imageName: "delivery_icon", text: "20 мин")
                     
-                    InfoRectangleView(imageName: nil, text: "120 ккал")
+                    InfoRectangleView(imageName: nil, text: "\(dish.calories) ккал")
                 }
                 
                 Text("Descrption")
@@ -72,10 +75,11 @@ struct DetailDishScreen: View {
                 
                 Spacer()
                 
+                
                 Button {
-                    print("Add to Cart")
+                    cartManager.addToCart(dish)
                 } label: {
-                    Text("Add to Cart")
+                    Text("В корзину")
                         .foregroundColor(.pink)
                         .fontWeight(.medium)
                         .padding(8)
@@ -95,6 +99,7 @@ struct DetailDishScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
+                //MARK:
                 Button {
                     print("добавить в избранное")
                 } label: {
